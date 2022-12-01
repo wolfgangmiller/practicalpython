@@ -4,14 +4,14 @@ Creation Data: 11/27/2022
 Revision Date:
 Blog Name: Practical Python
 Blog URL: https://practicalpythonnow.blogspot.com/
-Blog Post: Creating a Class-based Python Tkinter Template – Part 2
+Blog Post: Creating a Class-based Python Tkinter Template - Part 2
 
 Description: Post part of a series on creating a class-based GUI
             using Python's Tkinter module.
 
 Previous code: blog_1 available on github
 
-Changes: This version centers the window, add a favicon to the title bar, 
+Changes: 12/01/2022 - This version centers the window, add a favicon to the title bar, 
             and control window resizing. 
 """
 
