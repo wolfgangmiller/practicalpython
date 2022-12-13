@@ -1,5 +1,5 @@
 """
-Program: blog_1
+Program: blog_2
 Creation Data: 11/27/2022
 Revision Date:
 Blog Name: Practical Python
