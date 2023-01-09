@@ -13,3 +13,9 @@ Creating a Class-based Python Tkinter Template – Part 2
 
 Creating a Class-based Python Tkinter Template – Part 3
 - blog_3.py
+
+Creating a Class-based Python Tkinter Template – Part 4
+- blog_4.py
+
+Creating a Class-based Python Tkinter Template – Part 5
+- blog_5.py
