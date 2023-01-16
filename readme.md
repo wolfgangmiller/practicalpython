@@ -19,3 +19,6 @@ Creating a Class-based Python Tkinter Template – Part 4
 
 Creating a Class-based Python Tkinter Template – Part 5
 - blog_5.py  - Start od multi-page template
+
+Creating a Class-based Python Tkinter Template – Part 6
+- blog_6.py  - Add navigation buttons to pages
