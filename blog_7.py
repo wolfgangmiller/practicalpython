@@ -11,7 +11,7 @@ Description: Post part of a series on creating a class-based GUI
 
 Previous code: blog_6 available on github
 
-Changes: 01/15/2023 - Added menu bar with navigation options. 
+Changes: 01/25/2023 - Added menu bar with navigation options. 
 
 """ 
 
