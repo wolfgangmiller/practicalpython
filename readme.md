@@ -22,3 +22,6 @@ Creating a Class-based Python Tkinter Template – Part 5
 
 Creating a Class-based Python Tkinter Template – Part 6
 - blog_6.py  - Add navigation buttons to pages
+
+Creating a Class-based Python Tkinter Template – Part 7
+- blog_7.py  - Added menu bar with navigation options
