@@ -11,7 +11,7 @@ Description: Post part of a series on creating a class-based GUI
 
 Previous code: blog_7 available on github
 
-Changes: 02/15/2023 - Access data/functions on different pages. 
+Changes: 02/15/2023 - Access data/functions on different frame pages. 
 """ 
 
 import tkinter as tk
