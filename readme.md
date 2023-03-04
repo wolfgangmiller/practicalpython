@@ -28,3 +28,6 @@ Creating a Class-based Python Tkinter Template – Part 7
 
 Creating a Class-based Python Tkinter Template – Part 8
 - blog_8.py  - Access data/functions on different pages.
+
+Creating a Tabbed Notebook with Tkinter
+- blog_9.py  - Creating tabs in a notebook using Python's Tkinter module.
