@@ -24,8 +24,6 @@ from tkinter import messagebox
 class PageFrm(tk.Frame): 
     # Container frame for page content
     def __init__(self, parent):
-        # constructor allows the use of the same 
-        # args as the subclassed tk.Frame
         super().__init__(parent)
 
         # Class constant(s)
@@ -40,7 +38,7 @@ class PageFrm(tk.Frame):
 
     def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
         """
-        Description: Creates grid-based LabelFrame
+        Description: Creates frame for page content
         Param: parent  - Container widget into which frame is placed
         Param: text    - Label text for frame, default is null (no text)
         Param: bdwidth - Width of frame border, default is 0 (no border)
