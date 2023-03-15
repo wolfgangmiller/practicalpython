@@ -31,3 +31,6 @@ Creating a Class-based Python Tkinter Template – Part 8
 
 Creating a Tabbed Notebook with Tkinter
 - blog_9.py  - Creating tabs in a notebook using Python's Tkinter module.
+
+Using PanedWindow to create a slide out menu with Tkinter
+- blog_9.py  - Create a slide out menu using Tkinter's PanedWindow widget
