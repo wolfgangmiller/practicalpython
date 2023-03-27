@@ -29,11 +29,72 @@ class Page1(tk.Frame):
         # Provide navigation and access to page data
         self.ctrl = controller
 
-        # Answer to the question
-        self.pg2_answer = 'African or European?'
+        # Class constant(s)
+        self.TITLE_FONT = ("Helvetica", 16, "bold")
 
-        #  ====== Optional ========
-        # self.score = ''
+        # Configure layout proportions for frame container
+        self.columnconfigure(0, weight = 1)
+        self.rowconfigure(0, weight = 1)
+
+        # Define and place the widget
+        self.create_grid_frame(self, 'Screen Frame', 1)
+
+    def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
+        """
+        Description: Creates grid-based LabelFrame
+        Param: parent  - Container widget into which frame is placed
+        Param: text    - Label text for frame, default is null (no text)
+        Param: bdwidth - Width of frame border, default is 0 (no border)
+        Return: frame  - grid-based frame (parent must use grid for geometry manager)
+        """
+        # Define and place the widget
+        frame = tk.LabelFrame(parent, text=text)
+        frame.grid(column=0, row=0, padx=10, pady=10, sticky=tk.NSEW)
+        frame.configure(borderwidth=bdwidth)
+
+        #  Configure layout proportions for inside frame 
+        self.set_col_proportions(frame, (1, ))
+        self.set_row_proportions(frame, (1, 1))
+
+        # Create and place two Label widgets
+        title_lbl = tk.Label(frame, text = '-- Page 1 --', font=self.TITLE_FONT)
+        title_lbl.grid(column = 0, row = 0, pady=(10, 0), sticky = tk.EW)
+        page_btn = ttk.Button(frame, text = 'Page 2', width = 10,
+            command=lambda: self.ctrl.show_frame('Page2') )
+        page_btn.grid(column = 0, row = 1,pady=(30, 20), sticky = tk.N)
+
+        return frame
+
+    def set_row_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
+        """
+        Description: Create one or more rowconfigure() statements
+        Param: parent  - the frame to which the method refers
+        Param: weights - The weight value(s) for the row
+        Returns: None
+        """
+        for row, weight in enumerate(weights):
+            parent.rowconfigure(row, weight = weight)
+
+    def set_col_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
+        """
+        Description: Create one or more columnconfigure() statements
+        Param: parent  - the frame to which the method refers
+        Param: weights - The weight value(s) for the column
+        Returns: None
+        """
+        for col, weight in enumerate(weights):
+            parent.columnconfigure(col, weight = weight)
+
+
+class Page2(tk.Frame): 
+    # Container frame for page content
+    def __init__(self, parent, controller):
+        # constructor allows the use of the same 
+        # args as the subclassed tk.Frame
+        super().__init__(parent)
+
+        # Provide navigation and access to page data
+        self.ctrl = controller
 
         # Class constant(s)
         self.TITLE_FONT = ("Helvetica", 16, "bold")
@@ -61,109 +122,13 @@ class Page1(tk.Frame):
         #  Configure layout proportions for inside frame 
         self.set_col_proportions(frame, (1, ))
         self.set_row_proportions(frame, (1, 1))
-        ##  ====== Optional ========
-        # self.set_row_proportions(frame, (1, 1))
-
-        # Create and place two Label widgets
-        title_lbl = tk.Label(frame, text = '-- Page 1 --', font=self.TITLE_FONT)
-        title_lbl.grid(column = 0, row = 0, pady=(10, 0), sticky = tk.EW)
-        page_btn = ttk.Button(frame, text = 'Page 2', width = 10,
-            command=lambda: self.ctrl.show_frame('Page2') )
-        page_btn.grid(column = 0, row = 2,pady=(30, 20), sticky = tk.N)
-        ##  ====== Optional ========
-        # self.score_lbl = tk.Label(frame, text = f'Number Correct: ')
-        # self.score_lbl.grid(column = 0, row = 1, pady=(5, 0), sticky = tk.EW)
-
-        return frame
-
-    def set_row_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more rowconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the row
-        Returns: None
-        """
-        for row, weight in enumerate(weights):
-            parent.rowconfigure(row, weight = weight)
-
-    def set_col_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more columnconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the column
-        Returns: None
-        """
-        for col, weight in enumerate(weights):
-            parent.columnconfigure(col, weight = weight)
-
-    #  ====== Optional ========
-    # def update_score(self) -> None:
-    #     """
-    #     Description: Updates the display with the number of correct
-    #                  answers from the page 2 question
-    #     Returns: None
-    #     """
-    #     self.score_lbl.configure(text=f'Number Correct: {self.score}')
-
-
-class Page2(tk.Frame): 
-    # Container frame for page content
-    def __init__(self, parent, controller):
-        # constructor allows the use of the same 
-        # args as the subclassed tk.Frame
-        super().__init__(parent)
-
-        # Provide navigation and access to page data
-        self.ctrl = controller
-        
-        #  ====== Optional ========
-        # self.correct = 0
-
-        # Class constant(s)
-        self.TITLE_FONT = ("Helvetica", 16, "bold")
-
-        # Configure layout proportions for frame container
-        self.columnconfigure(0, weight = 1)
-        self.rowconfigure(0, weight = 1)
-
-        # Define and place the widget
-        self.create_grid_frame(self, 'Screen Frame', 1)
-
-    def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
-        """
-        Description: Creates grid-based LabelFrame
-        Param: parent  - Container widget into which frame is placed
-        Param: text    - Label text for frame, default is null (no text)
-        Param: bdwidth - Width of frame border, default is 0 (no border)
-        Return: frame  - grid-based frame (parent must use grid for geometry manager)
-        """
-        # Define and place the widget
-        frame = tk.LabelFrame(parent, text=text)
-        frame.grid(column=0, row=0, padx=10, pady=10, sticky=tk.NSEW)
-        frame.configure(borderwidth=bdwidth)
-
-        #  Configure layout proportions for inside frame 
-        frame.columnconfigure(0, weight = 1)
-        self.set_row_proportions(frame, (1, 1, 1, 1, 1, 1, 1))
 
         # Create and place two Label widgets
         title_lbl = tk.Label(frame, text = '-- Page 2 --', font=self.TITLE_FONT)
         title_lbl.grid(column = 0, row = 0, pady=(10, 0), sticky = tk.EW)
-        self.question_lbl = tk.Label(frame, 
-            text='What is the airspeed velocity \nof an unladen swallow?')
-        self.question_lbl.grid(column = 0, row = 1, pady=(10, 5), sticky = tk.EW)
-        self.question_ent = ttk.Entry(frame, width=20)
-        self.question_ent.grid(column = 0, row = 2, pady=(10, 5), sticky = tk.N)
-        self.answered_lbl = tk.Label(frame, text='Your Answer: ')
-        self.answered_lbl.grid(column = 0, row = 3, padx=(30, 0), pady=(5, 5), sticky = tk.W)
-        self.answer_lbl = tk.Label(frame, text='Correct Answer: ')
-        self.answer_lbl.grid(column = 0, row = 4, padx=(30, 0), pady=(5, 5), sticky = tk.W)
-        answer_btn = ttk.Button(frame, text = 'Answer', width = 10,
-            command=self.show_answer)
-        answer_btn.grid(column = 0, row = 5, pady=(10, 5), sticky = tk.N)
         page_btn = ttk.Button(frame, text = 'Page 1', width = 10,
             command=lambda: self.ctrl.show_frame('Page1') )
-        page_btn.grid(column = 0, row = 6, pady=(5, 10), sticky = tk.N)
+        page_btn.grid(column = 0, row = 1,pady=(30, 20), sticky = tk.N)
 
         return frame
 
@@ -186,31 +151,6 @@ class Page2(tk.Frame):
         """
         for col, weight in enumerate(weights):
             parent.columnconfigure(col, weight = weight)
-
-    def show_answer(self) -> None:
-        """
-        Description: Display the entered and correct answers. 
-                     Optionally: Updates number of correct 
-                     displayed on page 1.
-        Returns: None
-        """
-        # Gets correct answer from page 1
-        b_of_d_answer = self.ctrl.frames['Page1'].pg2_answer
-        # Gets entered answer
-        answered = self.question_ent.get()
-        # Displays correct and entered answer
-        self.answer_lbl.configure(text=f'Correct Answer: {b_of_d_answer}')
-        self.answered_lbl.configure(text=f'Your Answer: {answered}')
-
-        #  ====== Optional ========
-        # # Check if entered answer is the same as correct one
-        # if answered.lower() == b_of_d_answer.lower():
-        #     # Increase correct count
-        #     self.correct += 1
-        # # Assign correct count to score on page 1
-        # self.ctrl.frames['Page1'].score = self.correct
-        # # Call page 1 method to update score displayed on page 1
-        # self.ctrl.frames['Page1'].update_score()
 
 
 class App(tk.Tk):  
