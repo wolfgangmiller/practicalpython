@@ -1,17 +1,17 @@
 """
-Program: blog_8
-Creation Data: 02/15/2023
+Program: blog_7
+Creation Data: 01/25/2023
 Revision Date:
 Blog Name: Practical Python
 Blog URL: https://practicalpythonnow.blogspot.com/
-Blog Post: Creating a Class-based Python Tkinter Template - Part 8
+Blog Post: Creating a Class-based Python Tkinter Template - Part 7
 
 Description: Post part of a series on creating a class-based GUI
             using Python's Tkinter module.
 
-Previous code: blog_7 available on github
+Previous code: blog_6 available on github
 
-Changes: 02/15/2023 - Access data/functions on different frame pages. 
+Changes: 01/25/2023 - Added menu bar with navigation options. 
 """ 
 
 import tkinter as tk
