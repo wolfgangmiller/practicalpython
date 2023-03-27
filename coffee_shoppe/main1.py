@@ -7,10 +7,11 @@ Blog URL: https://practicalpythonnow.blogspot.com/
 Blog Post: 
 
 Description: Post part of a series on creating a point of sales system
-            using Python's Tkinter module.
+            using Python's Tkinter module. 
 
-Previous code: blog_8 available on github
+            - Create a splash page for app
 
+Previous code: blog_7 available on github
 """ 
 
 import tkinter as tk
@@ -27,12 +28,6 @@ class Page1(tk.Frame):
 
         # Provide navigation and access to page data
         self.ctrl = controller
-
-        # Answer to the question
-        self.pg2_answer = 'African or European?'
-
-        #  ====== Optional ========
-        # self.score = ''
 
         # Class constant(s)
         self.TITLE_FONT = ("Helvetica", 16, "bold")
@@ -60,8 +55,6 @@ class Page1(tk.Frame):
         #  Configure layout proportions for inside frame 
         self.set_col_proportions(frame, (1, ))
         self.set_row_proportions(frame, (1, 1))
-        ##  ====== Optional ========
-        # self.set_row_proportions(frame, (1, 1))
 
         # Create and place two Label widgets
         title_lbl = tk.Label(frame, text = 'Point of Sales', 
@@ -75,9 +68,6 @@ class Page1(tk.Frame):
         page_btn = ttk.Button(frame, text = 'Login', width = 10,
             command=lambda: self.ctrl.show_frame('Page2') )
         page_btn.grid(column = 0, row = 2,pady=(30, 20), sticky = tk.N)
-        ##  ====== Optional ========
-        # self.score_lbl = tk.Label(frame, text = f'Number Correct: ')
-        # self.score_lbl.grid(column = 0, row = 1, pady=(5, 0), sticky = tk.EW)
 
         return frame
 
@@ -100,15 +90,6 @@ class Page1(tk.Frame):
         """
         for col, weight in enumerate(weights):
             parent.columnconfigure(col, weight = weight)
-
-    #  ====== Optional ========
-    # def update_score(self) -> None:
-    #     """
-    #     Description: Updates the display with the number of correct
-    #                  answers from the page 2 question
-    #     Returns: None
-    #     """
-    #     self.score_lbl.configure(text=f'Number Correct: {self.score}')
 
 
 class Page2(tk.Frame): 
@@ -262,7 +243,6 @@ class App(tk.Tk):
 
         # Assign menu bar to the window
         self.config(menu=self.menu_bar)
-
 
     def help(self) -> None:
         """
