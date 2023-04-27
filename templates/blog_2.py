@@ -13,6 +13,7 @@ Previous code: blog_1 available on github
 
 Changes: 12/01/2022 - This version centers the window, add a favicon to the title bar, 
             and control window resizing. 
+Changes: 04/29/2023 - Update path to favicon after move to templates folder
 """
 
 
@@ -39,7 +40,7 @@ class App(tk.Tk):  # Inheriting from Tk class
 
         # Define application properties
         self.title('Class Based GUI') # sets title
-        self.iconbitmap(default='wolftrack.ico') # sets favicon
+        self.iconbitmap(default='./templates/wolftrack.ico') # sets favicon
         # Sets window size and centers on screen
         self.geometry(f'{WIDTH}x{HEIGHT}+{x_offset}+{y_offset}') 
         # Set App window resizing options (width, height)

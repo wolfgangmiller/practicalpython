@@ -12,6 +12,7 @@ Description: Post part of a series on creating a class-based GUI
 Previous code: blog_2 available on github
 
 Changes: 12/13/2022 - This version a frame class to display page content. 
+Changes: 04/29/2023 - Update path to favicon after move to templates folder
 """
 
 import tkinter as tk
@@ -19,33 +20,35 @@ from tkinter import ttk
 from tkinter import messagebox
 
 
-class PageFrm(tk.Frame): # Container frame for page content
+class PageFrm(ttk.Frame): # Container frame for page content
     def __init__(self, parent):
         # constructor allows the use of the same 
         # args as the subclassed tk.Frame
         super().__init__(parent)
 
-        # Class constant(s)
-        TITLE_FONT = ("Helvetica", 16, "bold")
+        # Configure style
+        self.style = ttk.Style(self)
+        self.style.configure('Title.TLabel', font=('Helvetica', 16, 'bold'))
 
         # Configure layout proportions for frame container
         self.columnconfigure(0, weight = 1)
-        # self.rowconfigure(0, weight = 1)
+        self.rowconfigure(0, weight = 1)
 
         # Define and place the widget
-        screen_frm = tk.LabelFrame(self, text='Screen Frame')
+        screen_frm = ttk.LabelFrame(self, text='Screen Frame')
         screen_frm.grid(column=0, row=0, padx=10, pady=10, sticky=tk.NSEW)
 
-        #  Configure layout proportions for inside screen_frm 
-        screen_frm.columnconfigure(0, weight = 1)
-        screen_frm.rowconfigure(0, weight = 1)
-        screen_frm.rowconfigure(1, weight = 1)
-
         # Create and place two Label widgets
-        title_lbl = tk.Label(screen_frm, text = '-- Title Here --', font=TITLE_FONT)
-        title_lbl.grid(column = 0, row = 0, pady=(10, 0), sticky = tk.EW)
-        content_lbl = tk.Label(screen_frm, text = '-- Stuff Here --')
-        content_lbl.grid(column = 0, row = 1,pady=(30, 20), sticky = tk.EW)
+        title_lbl = ttk.Label(screen_frm, text = '-- Title Here --', 
+                              style='Title.TLabel')
+        title_lbl.pack(side=tk.TOP, pady=(20, 0))
+        content_lbl = ttk.Label(screen_frm, text = '-- Stuff Here --', 
+                                background='red')
+        content_lbl.pack(side=tk.TOP, expand=True, fill=tk.Y)
+
+
+        # Places instance in parent using the grid method
+        self.grid(colum=0, row=0, sticky = tk.NSEW)
 
 
 
@@ -68,14 +71,15 @@ class App(tk.Tk):  # Inheriting from Tk class
         # Define application properties
         self.title('Class Based GUI')
         self.geometry(f'{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x_offset}+{y_offset}')
-        self.iconbitmap(self, default='./wolftrack.ico')
+        self.iconbitmap(self, default='./templates/wolftrack.ico')
         self.resizable(width = False, height = False)
-        
+
+        # Creates a grid with one column and row    
         self.columnconfigure(0, weight = 1)
         self.rowconfigure(0, weight = 1)
 
         # Add content frame to application
-        PageFrm(self).grid(sticky = tk.NSEW)
+        PageFrm(self)
 
 
 def main():
