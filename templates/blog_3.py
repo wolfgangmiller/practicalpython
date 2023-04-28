@@ -45,7 +45,6 @@ class PageFrm(ttk.Frame): # Container frame for page content
         content_lbl = ttk.Label(screen_frm, text = '-- Stuff Here --')
         content_lbl.pack(side=tk.TOP, expand=True, fill=tk.Y)
 
-
         # Places instance in parent using the grid method
         self.grid(column=0, row=0, sticky = tk.NSEW)
 
