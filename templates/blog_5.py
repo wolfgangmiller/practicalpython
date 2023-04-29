@@ -13,7 +13,7 @@ Previous code: blog_4 available on github
 
 Changes: 01/09/2023 - Create two page classes. Modified App class
                     to support multiple pages. 
-
+Changes: 04/29/2023 - Update path to favicon after move to templates folder
 """ 
 
 import tkinter as tk
@@ -31,8 +31,9 @@ class Page1(tk.Frame):
         # Provide navigation and access to page data
         self.ctrl = controller
 
-        # Class constant(s)
-        self.TITLE_FONT = ("Helvetica", 16, "bold")
+        # Configure style
+        self.style = ttk.Style(self)
+        self.style.configure('Title.TLabel', font=('Helvetica', 16, 'bold'))
 
         # Configure layout proportions for frame container
         self.columnconfigure(0, weight = 1)
@@ -40,6 +41,9 @@ class Page1(tk.Frame):
 
         # Define and place the widget
         self.create_grid_frame(self, 'Screen Frame', 1)
+
+        # Places instance in parent using the grid method
+        self.grid(column=0, row=0, sticky = tk.NSEW)
 
     def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
         """
@@ -50,41 +54,18 @@ class Page1(tk.Frame):
         Return: frame  - grid-based frame (parent must use grid for geometry manager)
         """
         # Define and place the widget
-        frame = tk.LabelFrame(parent, text=text)
+        frame = ttk.LabelFrame(parent, text='Screen Frame')
         frame.grid(column=0, row=0, padx=10, pady=10, sticky=tk.NSEW)
         frame.configure(borderwidth=bdwidth)
 
-        #  Configure layout proportions for inside frame 
-        self.set_col_proportions(frame, (1, ))
-        self.set_row_proportions(frame, (1, 1))
-
         # Create and place two Label widgets
-        title_lbl = tk.Label(frame, text = '-- Page 1 --', font=self.TITLE_FONT)
-        title_lbl.grid(column = 0, row = 0, pady=(10, 0), sticky = tk.EW)
-        content_lbl = tk.Label(frame, text = '-- Stuff Here --')
-        content_lbl.grid(column = 0, row = 1,pady=(30, 20), sticky = tk.EW)
+        title_lbl = ttk.Label(frame, text = '-- Page 1 --', 
+                              style='Title.TLabel')
+        title_lbl.pack(side=tk.TOP, pady=(20, 0))
+        content_lbl = ttk.Label(frame, text = '-- Stuff Here --')
+        content_lbl.pack(side=tk.TOP, expand=True, fill=tk.Y)
 
         return frame
-
-    def set_row_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more rowconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the row
-        Returns: None
-        """
-        for row, weight in enumerate(weights):
-            parent.rowconfigure(row, weight = weight)
-
-    def set_col_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more columnconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the column
-        Returns: None
-        """
-        for col, weight in enumerate(weights):
-            parent.columnconfigure(col, weight = weight)
 
 
 class Page2(tk.Frame): 
@@ -97,8 +78,9 @@ class Page2(tk.Frame):
         # Provide navigation and access to page data
         self.ctrl = controller
 
-        # Class constant(s)
-        self.TITLE_FONT = ("Helvetica", 16, "bold")
+        # Configure style
+        self.style = ttk.Style(self)
+        self.style.configure('Title.TLabel', font=('Helvetica', 16, 'bold'))
 
         # Configure layout proportions for frame container
         self.columnconfigure(0, weight = 1)
@@ -106,6 +88,9 @@ class Page2(tk.Frame):
 
         # Define and place the widget
         self.create_grid_frame(self, 'Screen Frame', 1)
+
+        # Places instance in parent using the grid method
+        self.grid(column=0, row=0, sticky = tk.NSEW)
 
     def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
         """
@@ -116,41 +101,18 @@ class Page2(tk.Frame):
         Return: frame  - grid-based frame (parent must use grid for geometry manager)
         """
         # Define and place the widget
-        frame = tk.LabelFrame(parent, text=text)
+        frame = ttk.LabelFrame(parent, text='Screen Frame')
         frame.grid(column=0, row=0, padx=10, pady=10, sticky=tk.NSEW)
         frame.configure(borderwidth=bdwidth)
 
-        #  Configure layout proportions for inside frame 
-        self.set_col_proportions(frame, (1, ))
-        self.set_row_proportions(frame, (1, 1))
-
         # Create and place two Label widgets
-        title_lbl = tk.Label(frame, text = '-- Page 2 --', font=self.TITLE_FONT)
-        title_lbl.grid(column = 0, row = 0, pady=(10, 0), sticky = tk.EW)
-        content_lbl = tk.Label(frame, text = '-- Stuff Here --')
-        content_lbl.grid(column = 0, row = 1,pady=(30, 20), sticky = tk.EW)
+        title_lbl = ttk.Label(frame, text = '-- Page 2 --', 
+                              style='Title.TLabel')
+        title_lbl.pack(side=tk.TOP, pady=(20, 0))
+        content_lbl = ttk.Label(frame, text = '-- Stuff Here --')
+        content_lbl.pack(side=tk.TOP, expand=True, fill=tk.Y)
 
         return frame
-
-    def set_row_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more rowconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the row
-        Returns: None
-        """
-        for row, weight in enumerate(weights):
-            parent.rowconfigure(row, weight = weight)
-
-    def set_col_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more columnconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the column
-        Returns: None
-        """
-        for col, weight in enumerate(weights):
-            parent.columnconfigure(col, weight = weight)
 
 
 class App(tk.Tk):  
@@ -173,7 +135,7 @@ class App(tk.Tk):
         # Define application properties
         self.title('Class Based GUI')
         self.geometry(f'{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x_offset}+{y_offset}')
-        self.iconbitmap(self, default='./wolftrack.ico')
+        self.iconbitmap(self, default='./templates/wolftrack.ico')
         self.resizable(width = False, height = False)
         
         self.columnconfigure(0, weight = 1)
@@ -190,11 +152,9 @@ class App(tk.Tk):
             frame = pg_frm(parent=self, controller=self)
             # Adds key value pair to dictionary
             self.frames[page_name] = frame
-            # Places frame
-            frame.grid(row=0, column=0, sticky=tk.NSEW)
 
         # Display the page
-        self.show_frame('Page2')
+        self.show_frame('Page1')
 
     def show_frame(self, page_name:str) -> None:
         """
