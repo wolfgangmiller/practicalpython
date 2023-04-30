@@ -139,7 +139,7 @@ class App(tk.Tk):
         # Define application properties
         self.title('Class Based GUI')
         self.geometry(f'{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x_offset}+{y_offset}')
-        # self.iconbitmap(self, default='./wolftrack.ico')
+        self.iconbitmap(self, default='./templates/wolftrack.ico')
         self.resizable(width = False, height = False)
         
         self.columnconfigure(0, weight = 1)
