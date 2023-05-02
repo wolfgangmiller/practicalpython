@@ -11,8 +11,7 @@ Description: Use a PanedWindow to create a slide out left menu and
 
 Previous code: blog_4 available on github
 
-Changes: 
-
+Changes: 04/29/2023 - Update path to favicon after move to templates folder
 """
 
 import tkinter as tk
@@ -25,9 +24,12 @@ class PageFrm(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        # Class constant(s)
-        self.TITLE_FONT = ("Helvetica", 12, "bold")
-        self.HEADER_FONT = ("Helvetica", 16, "bold")
+        # Configure style
+        self.style = ttk.Style(self)
+        self.style.configure('Header.TLabel', font=('Helvetica', 14, 'bold'))
+        self.style.configure('Title.TLabel', font=('Helvetica', 12, 'bold'))
+        self.style.configure('Pane.TPanedwindow', background='lightgray')
+        self.style.configure("Sash", sashthickness=2)
 
         # Configure layout proportions for frame container
         self.columnconfigure(0, weight = 1)
@@ -35,6 +37,12 @@ class PageFrm(tk.Frame):
 
         # Define and place the widget
         self.create_paned_window_frame(self, 'Screen Frame', 1)
+
+        # Bind pane sash to motion event
+        self.pane.bind('<Motion>', lambda event: self.pane_max_size())
+
+        # Places instance in parent using the grid method
+        self.grid(column=0, row=0, sticky = tk.NSEW)
 
     def create_paned_window_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
         """
@@ -45,16 +53,17 @@ class PageFrm(tk.Frame):
         Return: frame  - grid-based frame (parent must use grid for geometry manager)
         """
         # Define and place the widget
-        frame = tk.LabelFrame(parent, text=text)
+        frame = ttk.LabelFrame(parent, text=text)
         frame.grid(column=0, row=0, padx=10, pady=10, sticky=tk.NSEW)
         frame.configure(borderwidth=bdwidth)
 
         #  Configure layout proportions for inside frame 
-        self.set_col_proportions(frame, (1, ))
-        self.set_row_proportions(frame, (1, 6))
+        frame.columnconfigure(0, weight=1)
+        frame.rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1, uniform=True)
 
         # Create header frame for menu button and title
-        header_frm = tk.Frame(frame, height=50, width=400)
+        # header_frm = ttk.Frame(frame, height=50, width=400)
+        header_frm = ttk.Frame(frame, height=50)
         header_frm.grid(column=0, row=0, sticky=tk.EW)
         header_frm.columnconfigure(0, weight=1)
         header_frm.columnconfigure(1, weight=8)
@@ -66,53 +75,46 @@ class PageFrm(tk.Frame):
         self.menu_btn.grid(column=0, row=0)
 
         # Create application header title
-        header_lbl = tk.Label(header_frm, text='Tkinter Demo', 
-                              font=self.HEADER_FONT)
-        header_lbl.grid(column=1, row=0, sticky=tk.EW)
+        header_lbl = ttk.Label(header_frm, text='PanedWindow Demo', 
+                              style='Header.TLabel')
+        header_lbl.grid(column=1, row=0, sticky=tk.N)
+
+        # Create frame with border for paned window
+        pane_frm = ttk.Frame(frame, borderwidth=2, relief=tk.SOLID)
+        pane_frm.grid(column=0, row=1, rowspan=6, sticky=tk.EW)
+        pane_frm.columnconfigure(0, weight=1)
+        pane_frm.rowconfigure(0, weight=1)
 
         # Create main pane window
-        self.pane = tk.PanedWindow(frame, bd=2, bg='grey', orient=tk.HORIZONTAL, 
-                                   height=250, width=400, relief=tk.FLAT)
-        self.pane.grid(column=0, row=1,  sticky=tk.N)
+        self.pane = ttk.PanedWindow(pane_frm, orient=tk.HORIZONTAL, 
+                                   height=250, width=400, style='Pane.TPanedwindow')
+        self.pane.grid(column=0, row=1, sticky=tk.N)
 
         # Create frame for left pane content and add to main pane window
-        self.left_frm = tk.Frame(self.pane)
+        self.left_frm = ttk.Frame(self.pane)
         self.pane.add(self.left_frm)
 
         # Create frame for right pane content and add to main pane window
-        self.right_frm = tk.Frame(self.pane)
+        self.right_frm = ttk.Frame(self.pane)
         self.pane.add(self.right_frm)
 
         # Initial right pane display
-        self.content_frm = tk.Frame(self.right_frm)
+        self.content_frm = ttk.Frame(self.right_frm)
         self.content_frm.pack()
         self.content_frm.columnconfigure(1, weight=1)
         self.content_frm.rowconfigure(0, weight=1)
-        opening_lbl = tk.Label(self.content_frm, text='Welcome to the \n PanelWindow Demo!')
-        opening_lbl.grid(column=0, row=0, pady=30)
+        opening_lbl = ttk.Label(self.content_frm, 
+                                text='Welcome to the Panel Window Demo!',
+                                wraplength=100,
+                                justify=tk.CENTER)
+        opening_lbl.grid(column=0, row=0, pady=30, sticky=tk.N)
 
         return frame
 
-    def set_row_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more rowconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the row
-        Returns: None
-        """
-        for row, weight in enumerate(weights):
-            parent.rowconfigure(row, weight = weight)
-
-    def set_col_proportions(self, parent:tk.Frame, weights:tuple[int]) -> None:
-        """
-        Description: Create one or more columnconfigure() statements
-        Param: parent  - the frame to which the method refers
-        Param: weights - The weight value(s) for the column
-        Returns: None
-        """
-        for col, weight in enumerate(weights):
-            parent.columnconfigure(col, weight = weight)
-
+    def pane_max_size(self) -> None:
+        if self.pane.sashpos(0) != 75:
+            self.pane.sashpos(0, newpos=75)
+    
     def show_menu(self, pane:ttk.PanedWindow) -> None:
         """
         Description: Create menu and adjust sash to display
@@ -120,7 +122,8 @@ class PageFrm(tk.Frame):
         Returns: None
         """
         # Move sash to display left menu button
-        pane.sash_place(0, x=75, y=1)
+        pane.sashpos(0, newpos=75)
+
         # Create left menu buttons
         left_btn_1 = ttk.Button(self.left_frm, text='Content 1', 
                                 command=self.create_content_1)
@@ -131,8 +134,7 @@ class PageFrm(tk.Frame):
         # Reset header menu button 'hide' left menu slider
         self.menu_btn.configure(text='X', 
                                 command=lambda: self.hide_menu(self.pane))
-
-
+        
     def hide_menu(self, pane:ttk.PanedWindow) -> None:
         """
         Description: Remove buttons in left menu slider and reset sash
@@ -140,31 +142,32 @@ class PageFrm(tk.Frame):
         Returns: None
         """
         # Move sash back to left edge
-        pane.sash_place(0, x=2, y=1)
+        pane.sashpos(0, newpos=0)
+
         # Remove left menu buttons
         for button in self.left_frm.winfo_children():
             button.destroy()
+
         # Reset header menu button 'show' left menu slider 
         self.menu_btn.configure(text='☰', 
                                 command=lambda: self.show_menu(self.pane))
-
+         
     def create_content_1(self) -> None:
         """
         Description: First display for right pane
         Returns: None
         """
         self.content_frm.destroy()
-        self.content_frm = tk.Frame(self.right_frm)
+        self.content_frm = ttk.Frame(self.right_frm)
         self.content_frm.pack()
 
         self.content_frm.columnconfigure(1, weight=1)
-        self.content_frm.rowconfigure(0, weight=1)
-        self.content_frm.rowconfigure(1, weight=1)
+        self.content_frm.rowconfigure((0, 1), weight=1)
 
-        title_lbl = tk.Label(self.content_frm, text='-- Pane Title One --', 
-                             font=self.TITLE_FONT)
+        title_lbl = ttk.Label(self.content_frm, text='-- Pane Title One --', 
+                                style='Title.TLabel')                            
         title_lbl.grid(column=0, row=0, pady=(30, 5))
-        title_lbl = tk.Label(self.content_frm, text='-- Pane Content 1 Here --')
+        title_lbl = ttk.Label(self.content_frm, text='-- Pane Content 1 Here --')
         title_lbl.grid(column=0, row=1, pady=(10, 5))
 
     def create_content_2(self) -> None:
@@ -173,17 +176,16 @@ class PageFrm(tk.Frame):
         Returns: None
         """
         self.content_frm.destroy()
-        self.content_frm = tk.Frame(self.right_frm)
+        self.content_frm = ttk.Frame(self.right_frm)
         self.content_frm.pack()
 
         self.content_frm.columnconfigure(1, weight=1)
-        self.content_frm.rowconfigure(0, weight=1)
-        self.content_frm.rowconfigure(1, weight=1)
+        self.content_frm.rowconfigure((0, 1), weight=1)
 
-        title_lbl = tk.Label(self.content_frm, text='-- Pane Title Two --', 
-                             font=self.TITLE_FONT)
+        title_lbl = ttk.Label(self.content_frm, text='-- Pane Title Two --', 
+                             style='Title.TLabel')
         title_lbl.grid(column=0, row=0, pady=(30, 5))
-        title_lbl = tk.Label(self.content_frm, text='-- Pane Content 2 Here --')
+        title_lbl = ttk.Label(self.content_frm, text='-- Pane Content 2 Here --')
         title_lbl.grid(column=0, row=1, pady=(10, 5))
 
 
@@ -194,7 +196,7 @@ class App(tk.Tk):
 
         # Program Info
         WINDOW_WIDTH = 400
-        WINDOW_HEIGHT = 300
+        WINDOW_HEIGHT = 320
 
         # get the screen dimension
         screen_width = self.winfo_screenwidth()
@@ -214,7 +216,7 @@ class App(tk.Tk):
         self.rowconfigure(0, weight = 1)
 
         # Add content frame to application
-        PageFrm(self).grid(sticky = tk.NSEW)
+        PageFrm(self)
 
 
 def main():
