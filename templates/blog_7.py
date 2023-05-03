@@ -44,13 +44,15 @@ class Page1(tk.Frame):
         # Places instance in parent using the grid method
         self.grid(column=0, row=0, sticky = tk.NSEW)
 
-    def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
+    def create_grid_frame(self, parent:tk.Frame, text:str = '', 
+                          bdwidth:int = 0) -> tk.Frame:
         """
         Description: Creates grid-based LabelFrame
         Param: parent  - Container widget into which frame is placed
         Param: text    - Label text for frame, default is null (no text)
         Param: bdwidth - Width of frame border, default is 0 (no border)
-        Return: frame  - grid-based frame (parent must use grid for geometry manager)
+        Return: frame  - grid-based frame (parent must use grid for 
+                        geometry manager)
         """
         # Define and place the widget
         frame = tk.LabelFrame(parent, text=text)
@@ -92,13 +94,15 @@ class Page2(tk.Frame):
         # Places instance in parent using the grid method
         self.grid(column=0, row=0, sticky = tk.NSEW)
 
-    def create_grid_frame(self, parent:tk.Frame, text:str = '', bdwidth:int = 0) -> tk.Frame:
+    def create_grid_frame(self, parent:tk.Frame, text:str = '', 
+                          bdwidth:int = 0) -> tk.Frame:
         """
         Description: Creates grid-based LabelFrame
         Param: parent  - Container widget into which frame is placed
         Param: text    - Label text for frame, default is null (no text)
         Param: bdwidth - Width of frame border, default is 0 (no border)
-        Return: frame  - grid-based frame (parent must use grid for geometry manager)
+        Return: frame  - grid-based frame (parent must use grid for 
+                        geometry manager)
         """
         # Define and place the widget
         frame = tk.LabelFrame(parent, text=text)
