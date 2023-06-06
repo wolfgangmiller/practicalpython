@@ -37,3 +37,6 @@ Using PanedWindow to create a slide out menu with Tkinter
 
 Create a Point of Sales System with Tkinter - Part 1
 - coffee_shoppe/main1.py  - Create a splash page for the application
+
+Create a Point of Sales System with Tkinter - Part 2
+- coffee_shoppe/main2.py  - Create a login page for the application
