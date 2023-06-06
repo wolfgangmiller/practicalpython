@@ -9,7 +9,7 @@ Blog Post:
 Description: Post part of a series on creating a point of sales system
             using Python's Tkinter module. 
 
-            - Create a login page for app
+            - Create a login page for app (Blog12)
 
 Previous code: main1.py available on github
 """ 
