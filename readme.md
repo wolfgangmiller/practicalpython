@@ -40,3 +40,6 @@ Create a Point of Sales System with Tkinter - Part 1
 
 Create a Point of Sales System with Tkinter - Part 2
 - coffee_shoppe/main2.py  - Create a login page for the application
+
+Create a Point of Sales System with Tkinter - Part 3
+- coffee_shoppe/Demo_db.py  - Demo on using SQL and SQLite3
