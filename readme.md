@@ -43,3 +43,13 @@ Create a Point of Sales System with Tkinter - Part 2
 
 Create a Point of Sales System with Tkinter - Part 3
 - coffee_shoppe/Demo_db.py  - Demo on using SQL and SQLite3
+- db_file.db
+
+Create a Point of Sales System with Tkinter - Part 4
+- coffee_shoppe/db_utils.py  - Create SQL module, Login, and Coffee databases
+- login.db
+- coffee.db
+- coffee_example_db
+- db_utils.py
+- utils_test.py
+- coffee_example.py
