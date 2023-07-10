@@ -8,7 +8,7 @@ import db_utils as dbu
 
 def main():
     # Data
-    user_list = [('maya', '123', 0), ('sue', '234', 1), ('bob', '345', 2)]
+    user_list = [('maya', '123', 1), ('sue', '234', 2), ('bob', '345', 3)]
 
     # Create SQL Statements
     create_table_sql = """ CREATE TABLE IF NOT EXISTS "Users" (
