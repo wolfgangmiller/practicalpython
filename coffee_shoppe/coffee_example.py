@@ -8,7 +8,7 @@ import db_utils as dbu
 
 def main():
 
-    DATABASE = 'coffee_shoppe\coffee_example.db'
+    DATABASE = 'coffee_shoppe\coffee.db'
 
     # Data - employee_id field will automatically create the id number as each record is added.
     emp_list = [('Maya', 'Name'), ('Sue', 'Schmitt'), ('Bob', 'Jones')]
