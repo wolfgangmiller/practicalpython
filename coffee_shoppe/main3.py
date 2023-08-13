@@ -225,7 +225,7 @@ class Page2(tk.Frame):      # Login Page
                                              self.username_str.get().strip().lower(),
                                              self.login_db)
 
-        if len(self.user) < 1:
+        if len(self.user_info) < 1:
             # Empty list as userID was not found
             success = False
         else:
