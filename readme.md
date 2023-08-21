@@ -56,3 +56,6 @@ Create a Point of Sales System with Tkinter - Part 4
 
 Create a Point of Sales System with Tkinter - Part 5
 - coffee_shoppe/main3.py.py  - Finish Login page with user validation via databases
+
+Create a Point of Sales System with Tkinter - Part 6
+- coffee_shoppe/main4.py.py  - Create layout for Order Entry page
