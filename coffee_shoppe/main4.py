@@ -9,8 +9,14 @@ Blog Post:
 Description: Post part of a series on creating a point of sales system
             using Python's Tkinter module. 
 
-            - Create Coffee table in coffee.db 
-            - Create layout for Order Entry page
+            - Blog 16 Create Coffee table in coffee.db 
+            - Blog 16 Create layout for Order Entry page
+            - Blog 17 Update menu bar
+            - Blog 17 Add transition to Order Entry page on successful log in
+            - Blog 17 Update coffee type info with data from coffee database
+            - Blog 18 Add class variables and vars
+            - Blog 18 Add ability to or multiple coffee types in an order
+            - Blog 18 Calculate order summary (subtotal, tax, and total due)
 
 Previous code: main3.py available on github
 """ 
@@ -235,12 +241,20 @@ class Page2(tk.Frame):      # Login Page
 
         if success:
             self.emp_name = self.get_emp_name(self.user_info[0][2])
-            self.instructions_lbl.configure(text=f'{self.emp_name} is successfully login')
+            # self.instructions_lbl.configure(text=f'{self.emp_name} is successfully login')
 
             # Set to update menu bar 
             self.ctrl.logged_in = True
             self.ctrl.create_menu_bar(self.ctrl)
             self.clear_login_entries()
+
+            # Update barista name on Order Entry and employee id on Payment pages
+            self.ctrl.frames['Page3'].barista_name = self.emp_name
+
+            # Update the label text on Order Entry to show employee's name
+            self.ctrl.frames['Page3'].barista_lbl.configure(text=f"Barista: {self.ctrl.frames['Page3'].barista_name}")
+
+            self.ctrl.show_frame('Page3')
             
         else:
             messagebox.showwarning(
@@ -265,9 +279,38 @@ class Page3(tk.Frame):      # Order Page
         # Provide navigation and access to page data
         self.ctrl = controller
 
+        # Constraints
+        self.DATABASE = self.ctrl.COFFEE_DB
+        self.COFFEE_OPTIONS = self.get_coffee_info()
+        self.TAX_RATE = 0.06
+
         # Configure style
         self.ctrl.style.configure('Title.TLabel', 
                              font=(self.ctrl.TITLE_FONT))
+        
+        # Initialize variables
+        self.barista_name = ''                  # Name of barista placing order
+        self.quantity = 0                       # Number of specific item
+        self.index_offset = 1                   # Offset item id to match position in list
+        self.subtotal = 0                       # Subtotal of order
+        self.tax = 0                            # Tax on order
+        self.total_due = 0                      # Total cost of order
+        self.order_date = ''                    # Date order was created
+        self.order_time = ''                    # Time order was created
+        self.order_items = []                   # Info on items ordered
+        self.order = []                         # Info on individual order
+        self.orders = []                        # List of all orders
+
+        self.item_type_int = tk.IntVar()
+        self.quantity_ent_str = tk.StringVar(value='')
+        self.item_amt_ent_str = tk.StringVar(value='')
+        self.taxable_chk_str = tk.StringVar(value='1')  # Default is taxable
+        self.item_amt_str = tk.StringVar(value='')
+        self.item_type_str = tk.StringVar(value='')
+        self.subtotal_str = tk.StringVar(value='')
+        self.tax_str = tk.StringVar(value='')
+        self.total_due_str = tk.StringVar(value='')
+
 
         # Configure layout proportions for frame container
         self.columnconfigure(0, weight = 1)
@@ -348,15 +391,16 @@ class Page3(tk.Frame):      # Order Page
         ttk.Label(item_order_frm,
                   text='Quantity').grid(column=0, row=0,
                                         padx=(40, 0), sticky=tk.W)
-        self.quantity_ent = ttk.Entry(item_order_frm,
-                                      justify=tk.RIGHT, width=10
-                                      )
+        self.quantity_ent = ttk.Entry(item_order_frm, 
+                                      textvariable=self.quantity_ent_str,
+                                      justify=tk.RIGHT, width=10)
         self.quantity_ent.grid(column=1, row=0, padx=(0, 0), 
                                pady=(10, 0), sticky=tk.W)
         
         # Select if taxable
         self.taxable_chk = ttk.Checkbutton(item_order_frm,
                                            text='Taxable?',
+                                           variable=self.taxable_chk_str,
                                            onvalue='1',
                                            offvalue='0')
         self.taxable_chk.grid(column=0, row=1,
@@ -364,10 +408,11 @@ class Page3(tk.Frame):      # Order Page
 
         # Create item order buttons
         ttk.Button(item_order_frm, text='Calculate \n Selection', width=10,
-                   ).grid(
+                  command=self.cal_item_amt).grid(
             column=0, row=2, padx=(0, 10), pady=(0, 10), sticky=tk.E)
-        self.next_item_btn = ttk.Button(
-            item_order_frm, text='Clear for \n Next Item')
+        self.next_item_btn = ttk.Button(item_order_frm, 
+                                         text='Clear for \n Next Item',
+                                         command=self.next_item)
         self.next_item_btn.grid(column=1, row=2, padx=(
             10, 10), pady=(0, 10), sticky=tk.W)
         self.next_item_btn.config(state=tk.DISABLED)
@@ -378,7 +423,7 @@ class Page3(tk.Frame):      # Order Page
                                            padx=(40, 10), sticky=tk.W)
 
         self.item_amt_ent = tk.Entry(
-            item_order_frm, 
+            item_order_frm, textvariable=self.item_amt_ent_str,
             justify=tk.RIGHT, width=10,
             borderwidth=1, state=tk.DISABLED, 
             disabledbackground='white', disabledforeground='Black')
@@ -401,15 +446,25 @@ class Page3(tk.Frame):      # Order Page
         ttk.Label(item_type_frm, text='Coffee Selections').grid(
             column=0, row=0, sticky=tk.W)
 
-        ttk.Radiobutton(item_type_frm, text='Coffee 1', value='price 2',
+        ttk.Radiobutton(item_type_frm, text=self.COFFEE_OPTIONS[0][1], 
+                                       value=self.COFFEE_OPTIONS[0][0],
+                                       variable=self.item_type_int
                         ).grid(column=0, row=1, padx=(10, 0), sticky=tk.W)
-        ttk.Radiobutton(item_type_frm, text='Coffee 2', value='price 2',
+        ttk.Radiobutton(item_type_frm, text=self.COFFEE_OPTIONS[1][1], 
+                                       value=self.COFFEE_OPTIONS[1][0],
+                                       variable=self.item_type_int
                         ).grid(column=0, row=2, padx=(10, 0), sticky=tk.W)
-        ttk.Radiobutton(item_type_frm, text='Coffee 3', value='price 2',
+        ttk.Radiobutton(item_type_frm, text=self.COFFEE_OPTIONS[2][1], 
+                                       value=self.COFFEE_OPTIONS[2][0],
+                                       variable=self.item_type_int
                         ).grid(column=0, row=3, padx=(10, 0), sticky=tk.W)
-        ttk.Radiobutton(item_type_frm, text='Coffee 4', value='price 2',
+        ttk.Radiobutton(item_type_frm, text=self.COFFEE_OPTIONS[3][1], 
+                                       value=self.COFFEE_OPTIONS[3][0],
+                                       variable=self.item_type_int
                         ).grid(column=0, row=4, padx=(10, 0), sticky=tk.W)
-        ttk.Radiobutton(item_type_frm, text='Coffee 5', value='price 2',
+        ttk.Radiobutton(item_type_frm, text=self.COFFEE_OPTIONS[4][1], 
+                                       value=self.COFFEE_OPTIONS[4][0],
+                                       variable=self.item_type_int
                         ).grid(column=0, row=5, padx=(10, 0), pady=(0, 15),
                                 sticky=tk.W)
 
@@ -445,17 +500,17 @@ class Page3(tk.Frame):      # Order Page
         ttk.Label(frame, text='Total Due').grid(column=1, row=2, sticky=tk.W)
         
         # Create summary fields
-        self.sub_total_ent = tk.Entry(frame,
+        self.sub_total_ent = tk.Entry(frame, textvariable=self.subtotal_str,
             width=10, justify=tk.RIGHT, state=tk.DISABLED, 
             disabledbackground='white', disabledforeground='Black')
         self.sub_total_ent.grid(column=2, row=0, pady=(5, 0), sticky=tk.W)
 
-        self.sub_tax_ent = tk.Entry(frame, 
+        self.sub_tax_ent = tk.Entry(frame, textvariable=self.tax_str,
             width=10, justify=tk.RIGHT, state=tk.DISABLED, 
             disabledbackground='white', disabledforeground='Black')
         self.sub_tax_ent.grid(column=2, row=1, pady=(5, 0), sticky=tk.W,)
         
-        self.total_due_ent = tk.Entry(frame, 
+        self.total_due_ent = tk.Entry(frame, textvariable=self.total_due_str,
             width=10, justify=tk.RIGHT, state=tk.DISABLED, 
             disabledbackground='white', disabledforeground='Black')
         self.total_due_ent.grid(column=2, row=2, pady=(5, 10), sticky=tk.W)
@@ -464,6 +519,110 @@ class Page3(tk.Frame):      # Order Page
         frame.grid(column=0, row=2, padx=(10, 10), pady=(10, 10), sticky=tk.EW)
 
         return frame
+
+    def get_coffee_info(self) -> list[tuple]:
+        """
+        Description: Gets the coffee types and costs from Coffees table 
+                    in coffee db supplied in login page
+        Param: None
+        Returns      The coffee info
+        """
+        coffee_sql = 'SELECT * FROM Coffees'
+        conn = dbu.create_connection(self.DATABASE)
+        results = dbu.get_all_records(conn, coffee_sql, self.DATABASE)
+        return results
+
+    def get_item_cost(self) -> float:
+        '''
+        Description: Gets unit cost of selected item
+        Param: None
+        Return: Unit cost
+        '''     
+        selected = self.item_type_int.get() - self.index_offset
+        return self.COFFEE_OPTIONS[selected][2]    
+
+    def cal_item_amt(self) -> None:
+        '''
+        Description: Calculates selected item amount
+        Param: none
+        Return: None
+        '''
+        self.quantity = int(self.quantity_ent_str.get())
+        self.coffee_type = self.item_type_int.get() - self.index_offset
+
+        if self.quantity > 0 and self.item_type_int.get() != None:
+            item_amt = round(self.quantity
+                                * self.get_item_cost(), 2)
+            self.subtotal += item_amt           
+            self.item_amt_ent_str.set(f'{item_amt: .2f}')
+
+            self.order_items.append((self.quantity, self.coffee_type,
+                                        self.get_item_cost(), item_amt))           
+            print(self.order_items)
+
+            self.next_item_btn.config(state=tk.NORMAL)
+
+    def get_tax(self) -> float:
+        '''
+        Description: Calculates tax on taxable orders
+        Param: none
+        Return: tax on order
+        '''
+        if self.taxable_chk_str.get():
+            return float(self.subtotal) * self.TAX_RATE
+        else:
+            return 0.00
+
+    def summary(self) -> None:
+        '''
+        Description: Tallies order and adds tax if taxable
+        Param: ctrl - Reference the App class
+        Return: None
+        '''
+        # Calculate tax and payment
+        self.tax = self.get_tax()
+        self.total_due = self.subtotal + self.tax
+
+        # tally number of items in order
+        # num_of_items = self.get_num_of_items(self.order_items)
+
+        # Display in summary fields
+        self.subtotal_str.set(f'{self.subtotal: .2f}')
+        self.tax_str.set(f'{self.tax: .2f}')
+        self.total_due_str.set(f'{self.total_due: .2f}')
+
+    def clear_order_entries(self) -> None:
+        '''
+        Description: Clears order entry fields
+        Param: none
+        Return: None
+        '''
+        self.quantity_ent.delete(0, tk.END)
+        self.item_amt_ent.configure(state=tk.NORMAL)
+        self.item_amt_ent.delete(0, tk.END)
+        self.item_amt_ent.configure(state=tk.DISABLED)
+
+    def reset_order_entry_vars(self) -> None:
+        '''
+        Description: Resets order entry field variables
+        Param: none
+        Return: None
+        '''
+        self.quantity_ent_str.set('')
+        self.item_amt_str.set('')
+        self.item_type_int.set(None)
+
+    def next_item(self) -> None:
+        '''
+        Description: Clears order entry fields and vars
+        Param: none
+        Return: None
+        '''        
+        self.reset_order_entry_vars()
+        self.clear_order_entries()
+
+    def new_order(self, ctrl) -> None:
+        pass
 
 
 class App(tk.Tk):  
@@ -539,12 +698,11 @@ class App(tk.Tk):
         page_menu = tk.Menu(self.menu_bar, tearoff=0)
 
         # Create Pages menu items
-        # page_menu.add_command(label='Page 1', command=lambda: self.show_frame('Page1'))
         if self.logged_in:
             page_menu.add_command(
                 label='Log out', command=lambda: self.frames['Page2'].logout())
             page_menu.add_command(
-                label='Page 3', command=lambda: self.show_frame('Page3'))
+                label='Order Entry', command=lambda: self.show_frame('Page3'))
         else:
             page_menu.add_command(
                 label='Login', command=lambda: self.show_frame('Page2'))
@@ -557,6 +715,12 @@ class App(tk.Tk):
         # Add Pages menu and menu items to the menu bar
         self.menu_bar.add_cascade(label='Pages', menu=page_menu)
 
+        # Create options for Task menu
+        if self.logged_in:
+            self.tasks_menu = tk.Menu(self.menu_bar, tearoff=0)
+            self.create_tasks2menu()
+            self.menu_bar.add_cascade(label='Tasks', menu=self.tasks_menu)
+
         # Create options for Help menu
         help_menu = tk.Menu(self.menu_bar, tearoff=0)
 
@@ -566,6 +730,18 @@ class App(tk.Tk):
 
         # Assign menu bar to the window
         self.config(menu=self.menu_bar)
+
+    def create_tasks2menu(self) -> None:  # Order Entry
+        self.tasks_menu.delete(0, 'end')  
+        self.tasks_menu.add_command(label='Calculate Item', 
+                                    command=lambda: self.frames['Page3'].cal_item_amt())
+        self.tasks_menu.add_command(label='Next Item',
+                                    command=lambda: self.frames['Page3'].next_item())
+        self.tasks_menu.add_separator()
+        self.tasks_menu.add_command(label='Calculate Total',
+                                    command=lambda: self.frames['Page3'].summary())
+        self.tasks_menu.add_command(label='New Order', 
+                                    command=lambda: self.frames['Page3'].new_order(self))
 
     def help(self) -> None:
         """
