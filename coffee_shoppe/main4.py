@@ -1,6 +1,6 @@
 """
 Program: Main 4
-Creation Data: 08/206/2023
+Creation Data: 08/26/2023
 Revision Date:
 Blog Name: Practical Python
 Blog URL: https://practicalpythonnow.blogspot.com/
@@ -17,6 +17,7 @@ Description: Post part of a series on creating a point of sales system
             - Blog 18 Add class variables and vars
             - Blog 18 Add ability to or multiple coffee types in an order
             - Blog 18 Calculate order summary (subtotal, tax, and total due)
+            - Blog 19 Create Items and Orders tables in coffee.db, 
 
 Previous code: main3.py available on github
 """ 
@@ -25,6 +26,7 @@ import tkinter as tk
 import db_utils as dbu
 from tkinter import ttk
 from tkinter import messagebox
+from datetime import datetime
 
 
 class Page1(tk.Frame):      # Splash Page
@@ -573,6 +575,17 @@ class Page3(tk.Frame):      # Order Page
         else:
             return 0.00
 
+    def get_num_of_items(self, items: list[tuple]) -> int:
+        '''
+        Description: Calculates the number of items in the order
+        Param: item - List of specific items in order
+        Return: number of items
+        '''
+        num = 0
+        for item in items:
+            num += item[0]
+        return num
+
     def summary(self) -> None:
         '''
         Description: Tallies order and adds tax if taxable
@@ -590,6 +603,24 @@ class Page3(tk.Frame):      # Order Page
         self.subtotal_str.set(f'{self.subtotal: .2f}')
         self.tax_str.set(f'{self.tax: .2f}')
         self.total_due_str.set(f'{self.total_due: .2f}')
+
+        # Get order creation date and time
+        now = datetime.now()  # current date and time
+        self.order_date = now.strftime('%m/%d/%Y')
+        self.order_time = now.strftime('%H:%M:%S')
+
+        # Tally number of items in order
+        num_of_items = self.get_num_of_items(self.order_items)
+
+        self.order = [self.order_date,
+                      self.order_time,
+                      self.order_items,
+                      self.subtotal,
+                      self.tax,
+                      self.total_due,
+                      num_of_items]
+
+        print(self.order)
 
     def clear_order_entries(self) -> None:
         '''

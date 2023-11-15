@@ -66,21 +66,27 @@ Create a Point of Sales System with Tkinter - Part 4
 - coffee_shoppe/coffee_example.py
 
 Create a Point of Sales System with Tkinter - Part 5
-- coffee_shoppe/main3.py.py  
+- coffee_shoppe/main3.py 
 - Finish Login page with user validation via databases
 
 Create a Point of Sales System with Tkinter - Part 6
-- coffee_shoppe/main4.py.py  
+- coffee_shoppe/main4.py 
 - Create layout for Order Entry page
 
 Create a Point of Sales System with Tkinter - Part 7
-- coffee_shoppe/main4.py.py 
+- coffee_shoppe/main4.py
 - Update menu bar
 - Add transition to Order Entry page on successful log in
 - Update coffee type info with data from coffee database
 
 Create a Point of Sales System with Tkinter - Part 8
-- coffee_shoppe/main4.py.py 
+- coffee_shoppe/main4.py
 - Add class variables and vars
 - Add ability to or multiple coffee types in an order
 - Calculate order summary (subtotal, tax, and total due)
+
+Create a Point of Sales System with Tkinter - Part 9
+- coffee_shoppe/main4.py 
+- Create order list
+- coffee_shoppe/coffee.db
+- Create Items and Orders tables
