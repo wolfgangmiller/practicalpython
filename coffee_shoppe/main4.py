@@ -17,7 +17,7 @@ Description: Post part of a series on creating a point of sales system
             - Blog 18 Add class variables and vars
             - Blog 18 Add ability to or multiple coffee types in an order
             - Blog 18 Calculate order summary (subtotal, tax, and total due)
-            - Blog 19 Create Items and Orders tables in coffee.db, 
+            - Blog 19 Create Items and Orders tables in coffee.db and order list
 
 Previous code: main3.py available on github
 """ 
