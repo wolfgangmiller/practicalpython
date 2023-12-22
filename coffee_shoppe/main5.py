@@ -1,5 +1,5 @@
 """
-Program: Main 4
+Program: Main 5
 Creation Data: 08/26/2023
 Revision Date:
 Blog Name: Practical Python
@@ -20,7 +20,7 @@ Description: Post part of a series on creating a point of sales system
             - Blog 19 Create Items and Orders tables in coffee.db and order list
             - Blog 20 Challenge to create base page class for other pages
 
-Previous code: main3.py available on github
+Previous code: main4.py available on github
 """ 
 
 import tkinter as tk
