@@ -118,3 +118,10 @@ This repository contains the files created in the [Practical Python](https://pra
 - Add Payment page option in Page menu
 - coffee_shoppe/blog7a.py
 - Example of class inheritance
+
+### Create a Point of Sales System with Tkinter - Part 11
+
+- coffee_shoppe/main5a.py
+- Create layout for Payment page
+- coffee_shoppe/coffee.db
+- Add Payment page to database
